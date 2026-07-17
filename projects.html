@@ -23,7 +23,39 @@
       <p>技术之外，也留一点轻松、鼓励和生活的温度。点击每条留言，就像点开一篇小博客。</p>
     </section>
 
+    <section class="section guestbook-composer" aria-label="写留言">
+      <div class="section-head">
+        <div>
+          <p class="kicker">New Message</p>
+          <h2>写一条留言</h2>
+        </div>
+      </div>
+      <form class="message-form" data-message-form>
+        <label>
+          留言标题
+          <input type="text" name="title" maxlength="40" placeholder="例如：今天的小记录" required />
+        </label>
+        <label>
+          留言内容
+          <textarea name="body" rows="5" maxlength="500" placeholder="写下想记录的话，最多 500 字。" required></textarea>
+        </label>
+        <label>
+          上传图片（可选）
+          <input type="file" name="image" accept="image/*" data-message-image />
+        </label>
+        <div class="message-preview is-hidden" data-message-preview>
+          <img alt="上传图片预览" data-message-preview-image />
+          <button class="btn ghost" type="button" data-clear-message-image>移除图片</button>
+        </div>
+        <div class="composer-actions">
+          <p data-message-status aria-live="polite"></p>
+          <button class="btn primary" type="submit">发布留言</button>
+        </div>
+      </form>
+    </section>
+
     <section class="section guestbook-list" aria-label="留言列表">
+      <div data-local-messages></div>
       <details class="message-post" open>
         <summary><span>2026-07-16</span><strong>今天也要给自己一点耐心</strong></summary>
         <div class="message-body">
