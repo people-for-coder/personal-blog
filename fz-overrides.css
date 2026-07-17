@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 /* FZ blog refinements */
 :root {
   color-scheme: dark;
@@ -18,6 +20,7 @@ body { margin: 0; background: linear-gradient(180deg, #090d12 0%, #0a0f15 42%, #
 a { color: inherit; text-decoration: none; }
 img { max-width: 100%; display: block; }
 .topbar { position: sticky; top: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; gap: 22px; padding: 16px clamp(18px, 4vw, 52px); background: rgba(9, 13, 18, .82); border-bottom: 1px solid var(--line); backdrop-filter: blur(18px); }
+.topbar.is-scrolled { background: rgba(9, 13, 18, .94); box-shadow: 0 10px 30px rgba(0, 0, 0, .24); }
 .brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: 0; color: var(--text); }
 .brand-mark, .avatar { display: grid; place-items: center; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #041018; font-family: var(--mono); font-weight: 800; }
 .brand-mark { width: 34px; height: 34px; border-radius: 8px; }
@@ -66,7 +69,7 @@ h3 { font-size: 1.05rem; }
 .stack-sidebar h2 { margin: 0 0 14px; }
 .stack-list { display: grid; gap: 8px; }
 .stack-list a { border: 1px solid var(--line); border-radius: 8px; padding: 9px 10px; background: rgba(77,212,255,.06); color: var(--text); font-family: var(--mono); font-size: .9rem; font-weight: 700; }
-.stack-list a:hover { border-color: rgba(77,212,255,.55); background: rgba(77,212,255,.12); }
+.stack-list a:hover, .stack-list a:focus-visible { border-color: rgba(77,212,255,.55); background: rgba(77,212,255,.12); }
 .home-feed { display: grid; gap: 14px; min-width: 0; }
 .blog-list-card { border: 1px solid var(--line); border-radius: 8px; background: rgba(17,25,35,.86); padding: 20px; }
 .blog-list-card > div { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 10px; }
@@ -87,3 +90,4 @@ h3 { font-size: 1.05rem; }
 .contact-links a { color: var(--accent); font-weight: 800; overflow-wrap: anywhere; }
 @media (max-width: 900px) { .avatar-intro, .home-layout { grid-template-columns: 1fr; } .avatar-card { max-width: 280px; } .stack-sidebar { position: static; } .stack-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } .message-body { padding-left: 20px; } }
 @media (max-width: 560px) { .avatar-card { max-width: none; } .stack-list { grid-template-columns: 1fr; } .message-post summary { grid-template-columns: 1fr; } .message-body img { aspect-ratio: 4 / 3; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; } }
