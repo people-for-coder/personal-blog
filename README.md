@@ -1,22 +1,101 @@
-# Personal Blog Frontend
+# FZ Personal Blog
 
-A static personal blog homepage designed for GitHub Pages, Netlify, Vercel, or any static hosting service.
+A lightweight static personal blog built with plain HTML, CSS, and JavaScript. The site is designed for GitHub Pages and focuses on readable technical writing, responsive layouts, and a simple maintenance workflow.
+
+## Live Site
+
+The site is published with GitHub Pages:
+
+<https://people-for-coder.github.io/personal-blog/>
+
+## Current Version
+
+`v1.0.0`
+
+This is the first public release of the blog. It establishes the static site structure, responsive page layout, article list, message board page, author page, and GitHub Pages deployment workflow.
 
 ## Features
 
-- Responsive editorial homepage
-- Featured article cards
-- Recent notes section
-- Author profile area
-- Light and dark theme toggle
-- Original hero visual asset
+- Static HTML/CSS/JavaScript implementation with no runtime framework.
+- Responsive layout for desktop, tablet, and mobile screens.
+- Home page with technical stack navigation and recent writing cards.
+- Article list page with keyword search and category filtering.
+- Message board page with expandable entries.
+- About page with profile and contact information.
+- GitHub Pages deployment through GitHub Actions.
+- UTF-8 source files with readable Chinese content.
 
-## Preview
+## Project Structure
 
-Open `index.html` in a browser.
+```text
+.
+├── .github/workflows/pages.yml   # GitHub Pages deployment workflow
+├── assets/                       # SVG avatar assets
+├── about.html                    # About page
+├── articles.html                 # Article list and search page
+├── fz-overrides.css              # Site-specific visual refinements
+├── index.html                    # Home page
+├── projects.html                 # Message board page
+├── script.js                     # Navigation, search, and filtering logic
+└── styles.css                    # Base site styles
+```
 
-## Customize
+## Local Preview
 
-- Edit blog name, author bio, and article titles in `index.html`.
-- Adjust colors, typography, and spacing in `styles.css`.
-- Replace `assets/hero-writing-studio.png` with your own hero image.
+You can preview the site with any static HTTP server:
+
+```bash
+python3 -m http.server 5173
+```
+
+Then open:
+
+```text
+http://127.0.0.1:5173/
+```
+
+Opening `index.html` directly in a browser also works for basic viewing, but using a local HTTP server is closer to the production environment.
+
+## Deployment
+
+The site is deployed automatically by GitHub Actions whenever changes are pushed to `main`.
+
+Deployment workflow:
+
+```text
+.github/workflows/pages.yml
+```
+
+GitHub Pages URL:
+
+```text
+https://people-for-coder.github.io/personal-blog/
+```
+
+## Versioning and Release Branches
+
+This project uses semantic versioning for public releases.
+
+- Stable development branch: `main`
+- First release branch: `release/v1.0.0`
+- First release tag: `v1.0.0`
+
+For future releases:
+
+1. Complete and verify changes on `main`.
+2. Create a release branch named `release/vX.Y.Z`.
+3. Create a Git tag named `vX.Y.Z`.
+4. Publish a GitHub Release from the tag.
+
+## Maintenance Notes
+
+- Update page content directly in the corresponding HTML file.
+- Keep shared styles in `styles.css`.
+- Keep project-specific visual overrides in `fz-overrides.css`.
+- Keep interactive behavior in `script.js`.
+- Run `git diff --check` before committing to catch whitespace issues.
+- Run `node --check script.js` after JavaScript changes.
+
+## License
+
+No license has been declared yet. Add a license file before distributing this project for reuse.
