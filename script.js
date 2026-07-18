@@ -14,11 +14,11 @@ const messagePreview = document.querySelector("[data-message-preview]");
 const messagePreviewImage = document.querySelector("[data-message-preview-image]");
 const clearMessageImage = document.querySelector("[data-clear-message-image]");
 const messageStatus = document.querySelector("[data-message-status]");
-const localMessages = document.querySelector("[data-local-messages]");
-const localMessageKey = "fz-blog-guestbook-messages";
-let selectedMessageImage = "";
+const remoteMessages = document.querySelector("[data-remote-messages]");
+let selectedMessageFile = null;
 
 const storedTheme = localStorage.getItem("blog-theme");
+const blogConfig = window.FZ_BLOG_CONFIG || {};
 
 if (storedTheme) {
   root.dataset.theme = storedTheme;
@@ -37,7 +37,6 @@ const closeNav = () => {
 
 if (navToggle && nav) {
   navToggle.setAttribute("aria-expanded", "false");
-  navToggle.setAttribute("aria-label", "打开导航");
 
   navToggle.addEventListener("click", () => {
     const isOpen = nav.classList.toggle("open");
@@ -54,37 +53,64 @@ if (navToggle && nav) {
 
 const normalize = (value) => value.trim().toLowerCase();
 
-const pad2 = (value) => String(value).padStart(2, "0");
-
-const formatMinuteTime = (date) => {
-  return [
-    date.getFullYear(),
-    pad2(date.getMonth() + 1),
-    pad2(date.getDate()),
-  ].join("-") + " " + [
-    pad2(date.getHours()),
-    pad2(date.getMinutes()),
-  ].join(":");
-};
-
 const setMessageStatus = (text) => {
   if (!messageStatus) return;
   messageStatus.textContent = text;
 };
 
-const loadMessages = () => {
-  try {
-    const raw = localStorage.getItem(localMessageKey);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
+const isSupabaseConfigured = () => {
+  return Boolean(blogConfig.supabaseUrl && blogConfig.supabaseAnonKey);
 };
 
-const saveMessages = (messages) => {
-  localStorage.setItem(localMessageKey, JSON.stringify(messages));
+const supabaseFetch = async (path, options = {}) => {
+  const baseUrl = String(blogConfig.supabaseUrl || "").replace(/\/$/, "");
+  const response = await fetch(`${baseUrl}/rest/v1/${path}`, {
+    ...options,
+    headers: {
+      apikey: blogConfig.supabaseAnonKey,
+      Authorization: `Bearer ${blogConfig.supabaseAnonKey}`,
+      "Content-Type": "application/json",
+      ...(options.headers || {}),
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(await response.text());
+  }
+
+  if (response.status === 204) {
+    return null;
+  }
+
+  return response.json();
+};
+
+const uploadMessageImage = async (file) => {
+  if (!file) return "";
+
+  const bucket = blogConfig.supabaseStorageBucket || "guestbook";
+  const baseUrl = String(blogConfig.supabaseUrl || "").replace(/\/$/, "");
+  const extension = file.name.split(".").pop()?.toLowerCase() || "jpg";
+  const safeExtension = /^[a-z0-9]{2,5}$/.test(extension) ? extension : "jpg";
+  const id = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  const key = `guestbook/${Date.now()}-${id}.${safeExtension}`;
+  const uploadUrl = `${baseUrl}/storage/v1/object/${bucket}/${encodeURIComponent(key).replace(/%2F/g, "/")}`;
+  const response = await fetch(uploadUrl, {
+    method: "POST",
+    headers: {
+      apikey: blogConfig.supabaseAnonKey,
+      Authorization: `Bearer ${blogConfig.supabaseAnonKey}`,
+      "Content-Type": file.type,
+      "x-upsert": "false",
+    },
+    body: file,
+  });
+
+  if (!response.ok) {
+    throw new Error(await response.text());
+  }
+
+  return `${baseUrl}/storage/v1/object/public/${bucket}/${key}`;
 };
 
 const createMessageElement = (message) => {
@@ -95,21 +121,27 @@ const createMessageElement = (message) => {
   const summary = document.createElement("summary");
   const time = document.createElement("span");
   const title = document.createElement("strong");
-  time.textContent = message.createdAt;
-  title.textContent = message.title;
+  time.textContent = new Date(message.created_at).toLocaleString("zh-CN", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  title.textContent = message.author_name;
   summary.append(time, title);
 
   const body = document.createElement("div");
   body.className = "message-body";
 
   const paragraph = document.createElement("p");
-  paragraph.textContent = message.body;
+  paragraph.textContent = message.content;
   body.append(paragraph);
 
-  if (message.image) {
+  if (message.image_url) {
     const image = document.createElement("img");
-    image.src = message.image;
-    image.alt = `${message.title} 配图`;
+    image.src = message.image_url;
+    image.alt = `${message.author_name} 的留言配图`;
     body.append(image);
   }
 
@@ -117,18 +149,32 @@ const createMessageElement = (message) => {
   return details;
 };
 
-const renderLocalMessages = () => {
-  if (!localMessages) return;
-  const messages = loadMessages();
-  const fragment = document.createDocumentFragment();
-  messages.forEach((message) => {
-    fragment.append(createMessageElement(message));
-  });
-  localMessages.replaceChildren(fragment);
+const renderRemoteMessages = async () => {
+  if (!remoteMessages) return;
+
+  if (!isSupabaseConfigured()) {
+    remoteMessages.innerHTML = '<p class="message-empty">留言板还没有配置 Supabase。请在 config.js 填入 supabaseUrl 和 supabaseAnonKey，并执行 docs/supabase-guestbook-schema.sql。</p>';
+    return;
+  }
+
+  try {
+    const messages = await supabaseFetch("guestbook_messages?select=id,author_name,content,image_url,created_at&status=eq.approved&order=created_at.desc&limit=100");
+    const fragment = document.createDocumentFragment();
+
+    if (!messages.length) {
+      remoteMessages.innerHTML = '<p class="message-empty">还没有公开留言，欢迎成为第一个留言的人。</p>';
+      return;
+    }
+
+    messages.forEach((message) => fragment.append(createMessageElement(message)));
+    remoteMessages.replaceChildren(fragment);
+  } catch {
+    remoteMessages.innerHTML = '<p class="message-empty">留言加载失败，请稍后再试。</p>';
+  }
 };
 
 const clearSelectedMessageImage = () => {
-  selectedMessageImage = "";
+  selectedMessageFile = null;
   if (messageImageInput) {
     messageImageInput.value = "";
   }
@@ -243,24 +289,20 @@ messageImageInput?.addEventListener("change", () => {
     return;
   }
 
-  if (file.size > 2 * 1024 * 1024) {
-    setMessageStatus("图片不能超过 2MB。");
+  if (file.size > 5 * 1024 * 1024) {
+    setMessageStatus("图片不能超过 5MB。");
     clearSelectedMessageImage();
     return;
   }
 
+  selectedMessageFile = file;
   const reader = new FileReader();
   reader.addEventListener("load", () => {
-    selectedMessageImage = String(reader.result || "");
-    if (messagePreview && messagePreviewImage && selectedMessageImage) {
-      messagePreviewImage.src = selectedMessageImage;
+    if (messagePreview && messagePreviewImage) {
+      messagePreviewImage.src = String(reader.result || "");
       messagePreview.classList.remove("is-hidden");
     }
     setMessageStatus("图片已选择。");
-  });
-  reader.addEventListener("error", () => {
-    setMessageStatus("图片读取失败，请重新选择。");
-    clearSelectedMessageImage();
   });
   reader.readAsDataURL(file);
 });
@@ -270,35 +312,47 @@ clearMessageImage?.addEventListener("click", () => {
   setMessageStatus("图片已移除。");
 });
 
-messageForm?.addEventListener("submit", (event) => {
+messageForm?.addEventListener("submit", async (event) => {
   event.preventDefault();
-  const formData = new FormData(messageForm);
-  const title = String(formData.get("title") || "").trim();
-  const body = String(formData.get("body") || "").trim();
 
-  if (!title || !body) {
-    setMessageStatus("请填写标题和内容。");
+  if (!isSupabaseConfigured()) {
+    setMessageStatus("请先在 config.js 配置 Supabase。");
     return;
   }
 
-  const message = {
-    id: globalThis.crypto?.randomUUID ? globalThis.crypto.randomUUID() : String(Date.now()),
-    title,
-    body,
-    image: selectedMessageImage,
-    createdAt: formatMinuteTime(new Date()),
-  };
+  const submitButton = messageForm.querySelector("button[type='submit']");
+  const formData = new FormData(messageForm);
+  const authorName = String(formData.get("author_name") || "").trim();
+  const content = String(formData.get("content") || "").trim();
+
+  if (authorName.length < 2 || content.length < 4) {
+    setMessageStatus("请填写昵称和留言内容。");
+    return;
+  }
+
+  submitButton.disabled = true;
+  setMessageStatus("正在提交...");
 
   try {
-    const messages = loadMessages();
-    messages.unshift(message);
-    saveMessages(messages);
-    renderLocalMessages();
+    const imageUrl = await uploadMessageImage(selectedMessageFile);
+    await supabaseFetch("guestbook_messages", {
+      method: "POST",
+      headers: { Prefer: "return=minimal" },
+      body: JSON.stringify({
+        author_name: authorName,
+        content,
+        image_url: imageUrl || null,
+        status: "pending",
+      }),
+    });
+
     messageForm.reset();
     clearSelectedMessageImage();
-    setMessageStatus(`发布成功：${message.createdAt}`);
+    setMessageStatus("留言已提交，审核通过后会公开显示。");
   } catch {
-    setMessageStatus("保存失败：浏览器本地存储空间可能不足。");
+    setMessageStatus("提交失败，请检查 Supabase 表和 Storage 策略。");
+  } finally {
+    submitButton.disabled = false;
   }
 });
 
@@ -319,4 +373,4 @@ window.addEventListener("resize", () => {
 
 syncHeader();
 applyArticleFilters();
-renderLocalMessages();
+renderRemoteMessages();

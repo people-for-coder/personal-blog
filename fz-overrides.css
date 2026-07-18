@@ -96,6 +96,8 @@ h3 { font-size: 1.05rem; }
 .message-body { display: grid; gap: 14px; padding: 0 20px 20px 146px; }
 .message-body p { margin-bottom: 0; color: var(--muted); }
 .message-body img { width: 100%; aspect-ratio: 16 / 7; object-fit: cover; border: 1px solid var(--line); border-radius: 8px; }
+.message-empty { border: 1px dashed var(--line); border-radius: 10px; background: rgba(17,25,35,.68); color: var(--muted); padding: 20px; }
+.message-form button:disabled { cursor: not-allowed; opacity: .62; }
 .contact-links { display: grid; gap: 10px; }
 .contact-links a { color: var(--accent); font-weight: 800; overflow-wrap: anywhere; }
 @media (max-width: 900px) { .avatar-intro, .home-layout { grid-template-columns: 1fr; } .avatar-card { max-width: 280px; } .stack-sidebar { position: static; } .stack-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } .message-body { padding-left: 20px; } }

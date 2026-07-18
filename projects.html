@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>留言板 | FZ的博客</title>
+  <title>留言板 | FZ 的博客</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet" />
@@ -12,15 +12,21 @@
 </head>
 <body>
   <header class="topbar">
-    <a class="brand" href="index.html"><span class="brand-mark">FZ</span><span>FZ的博客</span></a>
+    <a class="brand" href="index.html"><span class="brand-mark">FZ</span><span>FZ 的博客</span></a>
     <button class="nav-toggle" type="button" aria-label="打开导航" data-nav-toggle>☰</button>
-    <nav class="nav" data-nav><a href="index.html">首页</a><a href="articles.html">文章</a><a class="active" href="projects.html">留言板</a><a href="about.html">关于我</a></nav>
+    <nav class="nav" data-nav>
+      <a href="index.html">首页</a>
+      <a href="articles.html">文章</a>
+      <a class="active" href="projects.html">留言板</a>
+      <a href="about.html">关于我</a>
+    </nav>
   </header>
+
   <main class="page">
     <section class="page-title">
       <p class="kicker">Message Board</p>
-      <h1>QQ空间式留言板</h1>
-      <p>技术之外，也留一点轻松、鼓励和生活的温度。点击每条留言，就像点开一篇小博客。</p>
+      <h1>留言板</h1>
+      <p>欢迎留下想法、建议或鼓励。留言会先进入审核队列，通过后会同步显示在这个页面，其他设备也能看到。</p>
     </section>
 
     <section class="section guestbook-composer" aria-label="写留言">
@@ -32,12 +38,12 @@
       </div>
       <form class="message-form" data-message-form>
         <label>
-          留言标题
-          <input type="text" name="title" maxlength="40" placeholder="例如：今天的小记录" required />
+          昵称
+          <input type="text" name="author_name" maxlength="40" minlength="2" placeholder="你的昵称" required />
         </label>
         <label>
           留言内容
-          <textarea name="body" rows="5" maxlength="500" placeholder="写下想记录的话，最多 500 字。" required></textarea>
+          <textarea name="content" rows="5" maxlength="1200" minlength="4" placeholder="写下想说的话，最多 1200 字。" required></textarea>
         </label>
         <label>
           上传图片（可选）
@@ -49,44 +55,20 @@
         </div>
         <div class="composer-actions">
           <p data-message-status aria-live="polite"></p>
-          <button class="btn primary" type="submit">发布留言</button>
+          <button class="btn primary" type="submit">提交审核</button>
         </div>
       </form>
     </section>
 
     <section class="section guestbook-list" aria-label="留言列表">
-      <div data-local-messages></div>
-      <details class="message-post" open>
-        <summary><span>2026-07-16</span><strong>今天也要给自己一点耐心</strong></summary>
-        <div class="message-body">
-          <p>难题不是墙，是一张还没画完的地图。慢慢找线索，一次只解决一个小问题。</p>
-          <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="绿草地、树木和蓝天白云的自然风景" />
-        </div>
-      </details>
-      <details class="message-post">
-        <summary><span>2026-07-12</span><strong>写代码累了就去走一走</strong></summary>
-        <div class="message-body">
-          <p>回来之后，问题常常会自己变清楚。休息不是停下，是让大脑有空间重新组织答案。</p>
-          <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="阳光下的森林小路" />
-        </div>
-      </details>
-      <details class="message-post">
-        <summary><span>2026-07-08</span><strong>每周都比上周多理解一点</strong></summary>
-        <div class="message-body">
-          <p>不需要每一天都很厉害。保持节奏，保持记录，时间会把很多小的努力变成积累。</p>
-          <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="蓝天白云下的绿色山地" />
-        </div>
-      </details>
-      <details class="message-post">
-        <summary><span>2026-07-01</span><strong>把焦虑的事情慢慢拆成步骤</strong></summary>
-        <div class="message-body">
-          <p>把喜欢的东西慢慢做成作品。一次只做一小段，就能看见自己在往前走。</p>
-          <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="绿色田野、树木和云层" />
-        </div>
-      </details>
+      <div class="guestbook-remote-list" data-remote-messages>
+        <p class="message-empty">正在加载留言...</p>
+      </div>
     </section>
   </main>
-  <footer class="footer"><span>© 2026 FZ的博客</span><a href="articles.html">返回文章</a></footer>
+
+  <footer class="footer"><span>© 2026 FZ 的博客</span><a href="articles.html">返回文章</a></footer>
+  <script src="config.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

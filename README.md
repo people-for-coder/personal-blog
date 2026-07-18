@@ -21,6 +21,7 @@ This is the first public release of the blog. It establishes the static site str
 - Home page with technical stack navigation and recent writing cards.
 - Article list page with keyword search and category filtering.
 - Message board page with expandable entries.
+- Supabase-backed guestbook submissions with optional image upload.
 - About page with profile and contact information.
 - GitHub Pages deployment through GitHub Actions.
 - UTF-8 source files with readable Chinese content.
@@ -55,6 +56,17 @@ http://127.0.0.1:5173/
 ```
 
 Opening `index.html` directly in a browser also works for basic viewing, but using a local HTTP server is closer to the production environment.
+
+## Guestbook Sync Setup
+
+GitHub Pages is static hosting, so the message board uses Supabase directly from the browser. To enable cross-device sync:
+
+1. Create a Supabase project.
+2. Run `docs/supabase-guestbook-schema.sql` in the Supabase SQL editor.
+3. Copy the project URL and anon public key into `config.js`.
+4. Keep `supabaseStorageBucket` as `guestbook` unless you changed the bucket name in SQL.
+
+Public visitors can only insert `pending` messages and read `approved` messages. Review messages in the Supabase dashboard by changing `guestbook_messages.status` from `pending` to `approved`.
 
 ## Deployment
 
