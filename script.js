@@ -83,7 +83,8 @@ const supabaseFetch = async (path, options = {}) => {
     return null;
   }
 
-  return response.json();
+  const text = await response.text();
+  return text ? JSON.parse(text) : null;
 };
 
 const uploadMessageImage = async (file) => {
@@ -112,7 +113,8 @@ const uploadMessageImage = async (file) => {
     throw new Error(`Image upload failed (${response.status}): ${details}`);
   }
 
-  const result = await response.json().catch(() => null);
+  const text = await response.text();
+  const result = text ? JSON.parse(text) : null;
   const storedKey = typeof result?.Key === "string" ? result.Key.replace(`${bucket}/`, "") : key;
   return `${baseUrl}/storage/v1/object/public/${bucket}/${storedKey}`;
 };
