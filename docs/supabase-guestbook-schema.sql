@@ -53,8 +53,8 @@ create table if not exists public.blog_posts (
   tags text[] not null default '{}',
   cover_image_url text,
   content_markdown text not null default '',
-  is_published boolean not null default false,
-  published_at timestamptz,
+  is_published boolean not null default true,
+  published_at timestamptz default now(),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
