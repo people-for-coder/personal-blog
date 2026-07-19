@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>文章 | FZ 的博客</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="fz-overrides.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html"><span class="brand-mark">FZ</span><span>FZ 的博客</span></a>
+    <button class="nav-toggle" type="button" aria-label="打开导航" data-nav-toggle>☰</button>
+    <nav class="nav" data-nav>
+      <a href="index.html">首页</a>
+      <a class="active" href="articles.html">文章</a>
+      <a href="projects.html">留言板</a>
+      <a href="about.html">关于我</a>
+    </nav>
+  </header>
+
+  <main class="page article-page">
+    <a class="back-link" href="articles.html">← 返回文章列表</a>
+    <article data-post-detail>
+      <section class="article-hero">
+        <p class="kicker">Post</p>
+        <h1>正在加载文章...</h1>
+      </section>
+    </article>
+
+    <section class="section comments-section" data-comments-section hidden>
+      <div class="section-head">
+        <div>
+          <p class="kicker">Comments</p>
+          <h2>评论</h2>
+        </div>
+      </div>
+
+      <form class="comment-form" data-comment-form>
+        <label>
+          昵称
+          <input type="text" name="author_name" maxlength="40" minlength="2" placeholder="你的昵称" required />
+        </label>
+        <label>
+          评论内容
+          <textarea name="content" rows="4" maxlength="1200" minlength="2" placeholder="写下你的想法。" required></textarea>
+        </label>
+        <div class="composer-actions">
+          <p data-comment-status aria-live="polite"></p>
+          <button class="btn primary" type="submit">发表评论</button>
+        </div>
+      </form>
+
+      <div class="comments-list" data-comments-list>
+        <p class="message-empty">正在加载评论...</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>© 2026 FZ 的博客</span>
+    <a href="articles.html">文章列表</a>
+  </footer>
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+  <script src="blog.js"></script>
+</body>
+</html>

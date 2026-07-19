@@ -98,6 +98,25 @@ h3 { font-size: 1.05rem; }
 .message-body img { width: min(100%, 760px); height: auto; max-height: 720px; object-fit: contain; border: 1px solid var(--line); border-radius: 8px; background: rgba(7,16,24,.72); }
 .message-empty { border: 1px dashed var(--line); border-radius: 10px; background: rgba(17,25,35,.68); color: var(--muted); padding: 20px; }
 .message-form button:disabled { cursor: not-allowed; opacity: .62; }
+.writer-note { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 16px; }
+.writer-note p:last-child { margin-bottom: 0; color: var(--muted); font-size: .9rem; }
+.article-meta { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; color: var(--muted); }
+.article-meta span { border: 1px solid var(--line); border-radius: 999px; padding: 4px 9px; background: rgba(77,212,255,.06); font-size: .78rem; font-weight: 700; }
+.article-body.solo { max-width: 820px; }
+.article-body a { color: var(--accent); font-weight: 800; }
+.article-body ul { color: var(--muted); }
+.article-body pre { border: 1px solid var(--line); background: #071018; }
+.comments-section { max-width: 820px; }
+.comment-form { display: grid; gap: 14px; border: 1px solid var(--line); border-radius: 10px; background: rgba(17,25,35,.86); padding: 20px; }
+.comment-form label { display: grid; gap: 8px; color: var(--text); font-weight: 800; }
+.comment-form input, .comment-form textarea { width: 100%; border: 1px solid var(--line); border-radius: 8px; background: #071018; color: var(--text); padding: 12px 14px; font: inherit; }
+.comment-form textarea { resize: vertical; min-height: 112px; }
+.comment-form button:disabled { cursor: not-allowed; opacity: .62; }
+.comments-list { display: grid; gap: 12px; margin-top: 18px; }
+.comment-card { border: 1px solid var(--line); border-radius: 10px; background: rgba(17,25,35,.82); padding: 16px; }
+.comment-card div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+.comment-card strong { color: var(--text); }
+.comment-card p { margin-bottom: 0; color: var(--muted); white-space: pre-wrap; }
 .contact-links { display: grid; gap: 10px; }
 .contact-links a { color: var(--accent); font-weight: 800; overflow-wrap: anywhere; }
 @media (max-width: 900px) { .avatar-intro, .home-layout { grid-template-columns: 1fr; } .avatar-card { max-width: 280px; } .stack-sidebar { position: static; } .stack-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } .message-body { padding-left: 20px; } }

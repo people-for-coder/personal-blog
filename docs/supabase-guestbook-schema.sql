@@ -43,3 +43,63 @@ create policy "Anyone can read guestbook images"
   on storage.objects
   for select
   using (bucket_id = 'guestbook');
+
+create table if not exists public.blog_posts (
+  id uuid primary key default gen_random_uuid(),
+  slug text not null unique check (slug ~ '^[a-z0-9]+(?:-[a-z0-9]+)*$'),
+  title text not null check (char_length(title) between 2 and 120),
+  summary text not null default '' check (char_length(summary) <= 500),
+  category text not null default 'Notes' check (char_length(category) <= 40),
+  tags text[] not null default '{}',
+  cover_image_url text,
+  content_markdown text not null default '',
+  is_published boolean not null default false,
+  published_at timestamptz,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists blog_posts_public_idx
+  on public.blog_posts (is_published, published_at desc, created_at desc);
+
+alter table public.blog_posts enable row level security;
+
+drop policy if exists "Anyone can read published blog posts" on public.blog_posts;
+
+create policy "Anyone can read published blog posts"
+  on public.blog_posts
+  for select
+  using (is_published = true);
+
+create table if not exists public.post_comments (
+  id uuid primary key default gen_random_uuid(),
+  post_slug text not null references public.blog_posts(slug) on update cascade on delete cascade,
+  author_name text not null check (char_length(author_name) between 2 and 40),
+  content text not null check (char_length(content) between 2 and 1200),
+  created_at timestamptz not null default now()
+);
+
+create index if not exists post_comments_slug_created_idx
+  on public.post_comments (post_slug, created_at desc);
+
+alter table public.post_comments enable row level security;
+
+drop policy if exists "Anyone can read post comments" on public.post_comments;
+drop policy if exists "Anyone can create post comments" on public.post_comments;
+
+create policy "Anyone can read post comments"
+  on public.post_comments
+  for select
+  using (true);
+
+create policy "Anyone can create post comments"
+  on public.post_comments
+  for insert
+  with check (
+    exists (
+      select 1
+      from public.blog_posts
+      where blog_posts.slug = post_comments.post_slug
+        and blog_posts.is_published = true
+    )
+  );

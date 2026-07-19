@@ -1,133 +1,77 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>文章 | FZ的博客</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles.css" />
-<link rel="stylesheet" href="fz-overrides.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>文章 | FZ 的博客</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="fz-overrides.css" />
 </head>
 <body>
-<header class="topbar">
-<a class="brand" href="index.html">
-<span class="brand-mark">FZ</span>
-<span>FZ的博客</span>
-</a>
-<button class="nav-toggle" type="button" data-nav-toggle>☰</button>
-<nav class="nav" data-nav>
-<a href="index.html">首页</a>
-<a class="active" href="articles.html">文章</a>
-<a href="projects.html">留言板</a>
-<a href="about.html">关于我</a>
-</nav>
-</header>
-<main class="page">
-<section class="page-title">
-<p class="kicker">Writing System</p>
-<h1>文章与学习笔记</h1>
-<p>按技术栈组织文章：C语言、C++、JavaScript、Java、HTML、CSS、Python、Linux、FPGA。</p>
-</section>
-<section class="section search-panel">
-<label for="searchInput">搜索文章内容</label>
-<div class="search-row">
-<input id="searchInput" type="search" placeholder="C, C++, JavaScript, Linux, FPGA, Python..." data-search-input />
-<button class="btn primary" type="button" data-clear-search>清空</button>
-</div>
-<div class="search-results" data-search-results>
-</div>
-</section>
-<section class="section layout-sidebar">
-<aside class="sidebar">
-<h2>技术栈</h2>
-<div class="tag-cloud vertical" data-filter-group>
-<button data-filter="all">全部</button>
-<button data-filter="C">C语言</button>
-<button data-filter="CPP">C++</button>
-<button data-filter="JavaScript">JavaScript</button>
-<button data-filter="Java">Java</button>
-<button data-filter="HTML">HTML</button>
-<button data-filter="CSS">CSS</button>
-<button data-filter="Python">Python</button>
-<button data-filter="Linux">Linux</button>
-<button data-filter="FPGA">FPGA</button>
-</div>
-</aside>
-<div class="article-list" data-article-list>
-<article class="list-card" data-search-item data-category="C" data-tags="SDK API" data-title="C SDK API boundary" data-body="C SDK error code memory ownership">
-<div>
-<span class="pill">C语言</span>
-<time>2026-07-16</time>
-</div>
-<h2>
-<a href="articles.html">C SDK 接口设计边界</a>
-</h2>
-<p>错误码、内存所有权和上下文句柄，是 C SDK 能否长期维护的关键。</p>
-<div class="tags">
-<span>SDK</span>
-<span>API</span>
-</div>
-</article>
-<article class="list-card" data-search-item data-category="CPP" data-tags="RAII STL" data-title="C++ RAII notes" data-body="C++ RAII smart pointer template">
-<div>
-<span class="pill">C++</span>
-<time>2026-07-12</time>
-</div>
-<h2>
-<a href="articles.html">C++ RAII 学习笔记</a>
-</h2>
-<p>用资源所有权理解构造、析构和异常安全。</p>
-</article>
-<article class="list-card" data-search-item data-category="JavaScript" data-tags="frontend async" data-title="JavaScript async flow" data-body="JavaScript Promise async await">
-<div>
-<span class="pill">JavaScript</span>
-<time>2026-07-08</time>
-</div>
-<h2>
-<a href="articles.html">JavaScript 异步流程整理</a>
-</h2>
-<p>从回调、Promise 到 async/await，整理异步代码的可读性。</p>
-</article>
-<article class="list-card" data-search-item data-category="Linux" data-tags="pthread log" data-title="Linux log module" data-body="Linux pthread log module">
-<div>
-<span class="pill">Linux</span>
-<time>2026-06-28</time>
-</div>
-<h2>
-<a href="articles.html">Linux 多线程日志模块复盘</a>
-</h2>
-<p>围绕锁、缓冲区、落盘策略和故障恢复，复盘一个轻量日志模块。</p>
-</article>
-<article class="list-card" data-search-item data-category="FPGA" data-tags="Verilog timing" data-title="FPGA timing notes" data-body="FPGA Verilog timing constraint">
-<div>
-<span class="pill">FPGA</span>
-<time>2026-06-18</time>
-</div>
-<h2>
-<a href="articles.html">FPGA 时序约束学习笔记</a>
-</h2>
-<p>理解时钟、建立保持时间和跨时钟域的基本判断。</p>
-</article>
-<article class="list-card" data-search-item data-category="Python" data-tags="script automation" data-title="Python automation notes" data-body="Python automation file script">
-<div>
-<span class="pill">Python</span>
-<time>2026-05-30</time>
-</div>
-<h2>
-<a href="articles.html">Python 自动化脚本记录</a>
-</h2>
-<p>用简单脚本减少重复操作，把流程变成工具。</p>
-</article>
-</div>
-</section>
-</main>
-<footer class="footer">
-<span>© 2026 FZ的博客</span>
-<a href="articles.html">按时间归档</a>
-</footer>
-<script src="script.js">
-</script>
+  <header class="topbar">
+    <a class="brand" href="index.html"><span class="brand-mark">FZ</span><span>FZ 的博客</span></a>
+    <button class="nav-toggle" type="button" aria-label="打开导航" data-nav-toggle>☰</button>
+    <nav class="nav" data-nav>
+      <a href="index.html">首页</a>
+      <a class="active" href="articles.html">文章</a>
+      <a href="projects.html">留言板</a>
+      <a href="about.html">关于我</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="page-title">
+      <p class="kicker">Writing System</p>
+      <h1>文章与学习笔记</h1>
+      <p>文章从 Supabase 动态读取。你可以在 Supabase 的 `blog_posts` 表里写 Markdown，发布后这里会自动同步。</p>
+    </section>
+
+    <section class="section search-panel">
+      <label for="searchInput">搜索文章内容</label>
+      <div class="search-row">
+        <input id="searchInput" type="search" placeholder="C, C++, JavaScript, Linux, FPGA, Python..." data-blog-search-input />
+        <button class="btn primary" type="button" data-blog-clear-search>清空</button>
+      </div>
+      <div class="search-results" data-blog-search-results></div>
+    </section>
+
+    <section class="section layout-sidebar">
+      <aside class="sidebar">
+        <h2>技术栏</h2>
+        <div class="tag-cloud vertical" data-blog-filter-group>
+          <button class="active" data-filter="all">全部</button>
+          <button data-filter="C">C语言</button>
+          <button data-filter="CPP">C++</button>
+          <button data-filter="JavaScript">JavaScript</button>
+          <button data-filter="Java">Java</button>
+          <button data-filter="HTML">HTML</button>
+          <button data-filter="CSS">CSS</button>
+          <button data-filter="Python">Python</button>
+          <button data-filter="Linux">Linux</button>
+          <button data-filter="FPGA">FPGA</button>
+          <button data-filter="Notes">Notes</button>
+        </div>
+        <div class="writer-note">
+          <p class="kicker">Write</p>
+          <p>写文章：打开 Supabase Table Editor，进入 `blog_posts` 表，新建一行并把 `is_published` 设为 true。</p>
+        </div>
+      </aside>
+
+      <div class="article-list" data-dynamic-article-list>
+        <p class="message-empty">正在加载文章...</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>© 2026 FZ 的博客</span>
+    <a href="projects.html">留言板</a>
+  </footer>
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+  <script src="blog.js"></script>
 </body>
 </html>

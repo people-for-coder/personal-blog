@@ -22,6 +22,7 @@ This is the first public release of the blog. It establishes the static site str
 - Article list page with keyword search and category filtering.
 - Message board page with expandable entries.
 - Supabase-backed guestbook submissions with optional image upload.
+- Supabase-backed dynamic posts and instant comments.
 - About page with profile and contact information.
 - GitHub Pages deployment through GitHub Actions.
 - UTF-8 source files with readable Chinese content.
@@ -67,6 +68,14 @@ GitHub Pages is static hosting, so the message board uses Supabase directly from
 4. Keep `supabaseStorageBucket` as `guestbook` unless you changed the bucket name in SQL.
 
 Public visitors can only insert `pending` messages and read `approved` messages. Review messages in the Supabase dashboard by changing `guestbook_messages.status` from `pending` to `approved`.
+
+## Writing Posts and Comments
+
+Posts are stored in the Supabase `blog_posts` table. See `docs/writing-posts.md` for field details.
+
+Published posts are visible on `articles.html` and open through `post.html?slug=...`.
+
+Comments are stored in `post_comments`. They are public immediately after submission and do not require moderation.
 
 ## Deployment
 
