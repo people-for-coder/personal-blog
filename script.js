@@ -75,7 +75,8 @@ const supabaseFetch = async (path, options = {}) => {
   });
 
   if (!response.ok) {
-    throw new Error(await response.text());
+    const details = await response.text();
+    throw new Error(`Database request failed (${response.status}): ${details}`);
   }
 
   if (response.status === 204) {
@@ -107,10 +108,13 @@ const uploadMessageImage = async (file) => {
   });
 
   if (!response.ok) {
-    throw new Error(await response.text());
+    const details = await response.text();
+    throw new Error(`Image upload failed (${response.status}): ${details}`);
   }
 
-  return `${baseUrl}/storage/v1/object/public/${bucket}/${key}`;
+  const result = await response.json().catch(() => null);
+  const storedKey = typeof result?.Key === "string" ? result.Key.replace(`${bucket}/`, "") : key;
+  return `${baseUrl}/storage/v1/object/public/${bucket}/${storedKey}`;
 };
 
 const createMessageElement = (message) => {
@@ -349,8 +353,10 @@ messageForm?.addEventListener("submit", async (event) => {
     messageForm.reset();
     clearSelectedMessageImage();
     setMessageStatus("留言已提交，审核通过后会公开显示。");
-  } catch {
-    setMessageStatus("提交失败，请检查 Supabase 表和 Storage 策略。");
+  } catch (error) {
+    console.error(error);
+    const message = error instanceof Error ? error.message : "Unknown error";
+    setMessageStatus(`提交失败：${message.slice(0, 180)}`);
   } finally {
     submitButton.disabled = false;
   }
