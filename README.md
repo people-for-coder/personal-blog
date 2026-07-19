@@ -20,6 +20,7 @@ This is the first public release of the blog. It establishes the static site str
 - Responsive layout for desktop, tablet, and mobile screens.
 - Home page with technical stack navigation and recent writing cards.
 - Article list page with keyword search and category filtering.
+- Frontend article writer with Markdown preview and protected publishing password.
 - Message board page with expandable entries.
 - Supabase-backed guestbook submissions with optional image upload.
 - Supabase-backed dynamic posts and instant comments.
@@ -35,6 +36,8 @@ This is the first public release of the blog. It establishes the static site str
 ├── assets/                       # SVG avatar assets
 ├── about.html                    # About page
 ├── articles.html                 # Article list and search page
+├── write.html                    # Frontend article composer
+├── writer.js                     # Article publishing flow
 ├── fz-overrides.css              # Site-specific visual refinements
 ├── index.html                    # Home page
 ├── projects.html                 # Message board page
@@ -71,7 +74,7 @@ Public visitors can only insert `pending` messages and read `approved` messages.
 
 ## Writing Posts and Comments
 
-Posts are stored in the Supabase `blog_posts` table. See `docs/writing-posts.md` for field details.
+Posts can be published from `write.html`. The page calls a Supabase RPC with a publishing password and inserts into the `blog_posts` table. See `docs/writing-posts.md` for field details.
 
 Published posts are visible on `articles.html` and open through `post.html?slug=...`.
 
@@ -115,7 +118,7 @@ For future releases:
 - Keep project-specific visual overrides in `fz-overrides.css`.
 - Keep interactive behavior in `script.js`.
 - Run `git diff --check` before committing to catch whitespace issues.
-- Run `node --check script.js` after JavaScript changes.
+- Run `node --check script.js`, `node --check blog.js`, and `node --check writer.js` after JavaScript changes.
 
 ## License
 

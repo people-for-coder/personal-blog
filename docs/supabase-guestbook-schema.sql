@@ -71,6 +71,82 @@ create policy "Anyone can read published blog posts"
   for select
   using (is_published = true);
 
+create table if not exists public.blog_writer_secrets (
+  id boolean primary key default true,
+  secret_hash text not null,
+  updated_at timestamptz not null default now(),
+  constraint blog_writer_secrets_single_row check (id = true)
+);
+
+revoke all on public.blog_writer_secrets from anon, authenticated;
+
+-- Replace CHANGE_ME_WITH_A_LONG_PASSWORD before running this line for a new project.
+insert into public.blog_writer_secrets (id, secret_hash)
+values (true, extensions.crypt('CHANGE_ME_WITH_A_LONG_PASSWORD', extensions.gen_salt('bf')))
+on conflict (id) do nothing;
+
+create or replace function public.create_blog_post(
+  p_writer_secret text,
+  p_slug text,
+  p_title text,
+  p_summary text default '',
+  p_category text default 'Notes',
+  p_tags text[] default '{}',
+  p_cover_image_url text default null,
+  p_content_markdown text default ''
+)
+returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  inserted_post public.blog_posts;
+begin
+  if not exists (
+    select 1
+    from public.blog_writer_secrets
+    where id = true
+      and secret_hash = extensions.crypt(p_writer_secret, secret_hash)
+  ) then
+    raise exception 'invalid writer secret' using errcode = '28000';
+  end if;
+
+  insert into public.blog_posts (
+    slug,
+    title,
+    summary,
+    category,
+    tags,
+    cover_image_url,
+    content_markdown,
+    is_published,
+    published_at
+  )
+  values (
+    p_slug,
+    p_title,
+    coalesce(p_summary, ''),
+    coalesce(p_category, 'Notes'),
+    coalesce(p_tags, '{}'),
+    nullif(p_cover_image_url, ''),
+    coalesce(p_content_markdown, ''),
+    true,
+    now()
+  )
+  returning * into inserted_post;
+
+  return jsonb_build_object(
+    'slug', inserted_post.slug,
+    'title', inserted_post.title,
+    'published_at', inserted_post.published_at
+  );
+end;
+$$;
+
+revoke all on function public.create_blog_post(text, text, text, text, text, text[], text, text) from public;
+grant execute on function public.create_blog_post(text, text, text, text, text, text[], text, text) to anon, authenticated;
+
 create table if not exists public.post_comments (
   id uuid primary key default gen_random_uuid(),
   post_slug text not null references public.blog_posts(slug) on update cascade on delete cascade,

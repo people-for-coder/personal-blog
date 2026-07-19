@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>写文章 | FZ 的博客</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="fz-overrides.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html"><span class="brand-mark">FZ</span><span>FZ 的博客</span></a>
+    <button class="nav-toggle" type="button" aria-label="打开导航" data-nav-toggle>☰</button>
+    <nav class="nav" data-nav>
+      <a href="index.html">首页</a>
+      <a href="articles.html">文章</a>
+      <a class="active" href="write.html">写文章</a>
+      <a href="projects.html">留言板</a>
+      <a href="about.html">关于我</a>
+    </nav>
+  </header>
+
+  <main class="page writer-page">
+    <section class="page-title writer-title">
+      <div>
+        <p class="kicker">Compose</p>
+        <h1>写新文章</h1>
+        <p>在这里写 Markdown，输入发布密码后保存，文章会直接出现在文章列表和详情页。</p>
+      </div>
+      <a class="btn ghost" href="articles.html">返回文章列表</a>
+    </section>
+
+    <section class="section writer-layout">
+      <form class="writer-form" data-post-form>
+        <label>
+          发布密码
+          <input type="password" name="writer_secret" autocomplete="current-password" placeholder="输入你的发布密码" required />
+        </label>
+
+        <div class="writer-grid">
+          <label>
+            标题
+            <input type="text" name="title" maxlength="120" minlength="2" placeholder="例如：Linux 文件描述符学习笔记" required data-post-title />
+          </label>
+          <label>
+            Slug
+            <input type="text" name="slug" maxlength="120" pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="linux-file-descriptor-notes" required data-post-slug />
+          </label>
+        </div>
+
+        <label>
+          摘要
+          <textarea name="summary" rows="3" maxlength="500" placeholder="一句话说明这篇文章写什么。"></textarea>
+        </label>
+
+        <div class="writer-grid">
+          <label>
+            分类
+            <select name="category">
+              <option>C</option>
+              <option>CPP</option>
+              <option>JavaScript</option>
+              <option>Java</option>
+              <option>HTML</option>
+              <option>CSS</option>
+              <option>Python</option>
+              <option>Linux</option>
+              <option>FPGA</option>
+              <option selected>Notes</option>
+            </select>
+          </label>
+          <label>
+            标签
+            <input type="text" name="tags" placeholder="Linux, 文件系统, C" />
+          </label>
+        </div>
+
+        <label>
+          封面图 URL
+          <input type="url" name="cover_image_url" placeholder="https://..." data-cover-url />
+        </label>
+
+        <label>
+          上传封面图（可选）
+          <input type="file" name="cover_image" accept="image/*" data-cover-file />
+        </label>
+
+        <div class="message-preview is-hidden" data-cover-preview>
+          <img alt="封面图预览" data-cover-preview-image />
+          <button class="btn ghost" type="button" data-clear-cover>移除封面</button>
+        </div>
+
+        <label>
+          正文 Markdown
+          <textarea name="content_markdown" rows="18" minlength="1" placeholder="# 标题&#10;&#10;写下你的内容。支持标题、列表、代码块、链接和图片。" required data-post-content></textarea>
+        </label>
+
+        <div class="composer-actions">
+          <p data-post-status aria-live="polite"></p>
+          <button class="btn primary" type="submit">发布文章</button>
+        </div>
+      </form>
+
+      <aside class="writer-preview" aria-label="文章预览">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Preview</p>
+            <h2>实时预览</h2>
+          </div>
+        </div>
+        <article data-post-preview>
+          <p class="message-empty">开始输入标题和正文后，这里会显示预览。</p>
+        </article>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>© 2026 FZ 的博客</span>
+    <a href="articles.html">文章列表</a>
+  </footer>
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+  <script src="blog.js"></script>
+  <script src="writer.js"></script>
+</body>
+</html>

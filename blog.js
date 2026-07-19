@@ -61,6 +61,12 @@ const inlineMarkdown = (value = "") => {
     .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" rel="noreferrer">$1</a>');
 };
 
+const imageMarkdown = (value = "") => {
+  const image = value.match(/^!\[([^\]]*)\]\((https?:\/\/[^)]+)\)$/);
+  if (!image) return "";
+  return `<figure class="article-image inline-image"><img src="${escapeHtml(image[2])}" alt="${escapeHtml(image[1] || "文章图片")}" /></figure>`;
+};
+
 const markdownToHtml = (markdown = "") => {
   const lines = markdown.replace(/\r\n/g, "\n").split("\n");
   const blocks = [];
@@ -108,6 +114,14 @@ const markdownToHtml = (markdown = "") => {
     if (!line.trim()) {
       flushParagraph();
       flushList();
+      return;
+    }
+
+    const imageBlock = imageMarkdown(line.trim());
+    if (imageBlock) {
+      flushParagraph();
+      flushList();
+      blocks.push(imageBlock);
       return;
     }
 

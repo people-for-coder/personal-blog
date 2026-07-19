@@ -17,6 +17,7 @@
     <nav class="nav" data-nav>
       <a href="index.html">首页</a>
       <a class="active" href="articles.html">文章</a>
+      <a href="write.html">写文章</a>
       <a href="projects.html">留言板</a>
       <a href="about.html">关于我</a>
     </nav>
@@ -26,7 +27,10 @@
     <section class="page-title">
       <p class="kicker">Writing System</p>
       <h1>文章与学习笔记</h1>
-      <p>文章从 Supabase 动态读取。你可以在 Supabase 的 `blog_posts` 表里写 Markdown，发布后这里会自动同步。</p>
+      <p>文章从站内写作页发布，保存后会自动同步到这里和其他设备。</p>
+      <div class="hero-actions compact-actions">
+        <a class="btn primary" href="write.html">写新文章</a>
+      </div>
     </section>
 
     <section class="section search-panel">
@@ -56,7 +60,8 @@
         </div>
         <div class="writer-note">
           <p class="kicker">Write</p>
-          <p>写文章：打开 Supabase Table Editor，进入 `blog_posts` 表，新建一行保存后会直接发布。</p>
+          <p>写文章：进入站内写作页，输入发布密码后保存，文章会直接显示。</p>
+          <a class="text-link" href="write.html">打开写作页</a>
         </div>
       </aside>
 
